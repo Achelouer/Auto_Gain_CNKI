@@ -6,3 +6,5 @@
 python包：selenium、lxml
 2.运行
 修改url、year、num
+
+#2.0利用PyQt5美化界面（输入框输入信息，按钮运行程序）
