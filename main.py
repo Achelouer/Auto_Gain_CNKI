@@ -8,6 +8,7 @@ import lxml
 from lxml import etree
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from configparser import ConfigParser   # Python2中是from ConfigParser import ConfigParser
 def get_m(urls):
     url = urls
     driver = webdriver.Edge()
@@ -53,18 +54,28 @@ def get_m(urls):
 
         f.write('\n')
         f.close()
-    print(title[0])
-    print(t3)
+    print(title[0]) #标题
+
+#ini 获取信息
 
 
-driver = webdriver.Chrome()
-driver.get('https://navi.cnki.net/knavi/journals/JSJX/detail?uniplatform=NZKPT')
+conf = ConfigParser()  # 需要实例化一个ConfigParser对象
+conf.read('set.ini')  # 需要添加上config.ini的路径，不需要open打开，直接给文件路径就读取，也可以指定encoding='utf-8'
+urls = conf['user']['url']
+year = conf['user']['year']
+num = conf['user']['num']
+f_time = int(conf['time']['f_time'])#首页加载时间
+
+driver = webdriver.Edge()
+driver.get(urls)
 #选择2022年第2期
-year = 2020
-num = '12'
-time.sleep(2)
+
+
+time.sleep(f_time)
+
 driver.find_element(By.XPATH,'//*[@id="'+str(year)+'_Year_Issue"]/dt/em').click()
-driver.find_element(By.XPATH,'//*[@id="yq'+str(year)+num+'"]').click()
+time.sleep(1)
+driver.find_element(By.XPATH,'//*[@id="yq'+str(year)+str(num)+'"]').click()
 time.sleep(2)
 
 #获取文件列表
