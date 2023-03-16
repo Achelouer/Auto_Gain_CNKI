@@ -19,9 +19,9 @@ def get_m(urls):
     _xpath = '//*[@class="wx-tit"]/h1/text()'
     t_xpath = '//*[@id="abstract_text"]/@value'  # 摘要
     t_xpath2 = '//*[@class="keywords"]/a/text()'  # 关键词
-    t_xpath3 = '/html/body/div[2]/div[1]/div[3]/div/div/div[7]/ul/li[last()]/p/text()' #分类号
+    t_xpath3 = '/html/body/div[2]/div[1]/div[3]/div/div/div[7]/ul/li[3]/p/text()' #分类号
     t_xpath4 = '//*[@class="author"]/span/a/text()'  # 作者
-
+    t_xpath42 = '//*[@class="author"]/span/text()'  # 作者
     t_xpath4_1 = '//*[@class="author"]/span/a/sup/text()' #作者标号
     t_xpath5 = '//*[@class="wx-tit"]/h3[2]/descendant::*/text()'  # 单位-->引入查取下级
     title = t_html.xpath(_xpath)
@@ -29,7 +29,7 @@ def get_m(urls):
     t2 = t_html.xpath(t_xpath2)
     t3 = t_html.xpath(t_xpath3)
     t4 = t_html.xpath(t_xpath4)
-
+    t42 = t_html.xpath(t_xpath42)
     t4_1 = t_html.xpath(t_xpath4_1)
     t5 = t_html.xpath(t_xpath5)
     driver.close()
@@ -42,6 +42,8 @@ def get_m(urls):
             f.write(i+' ')  # 去除后面格式
             if len(t4_1)>0:
                 f.write(t4_1[j]+'')
+            if len(t42)>0:
+                f.write(t42[j]+'')
             j = j+1
         f.write('\n')
 
@@ -63,7 +65,7 @@ def get_m(urls):
         f.write('\n')
         f.close()
     print(title[0]) #标题
-
+    print(t42)  # 标题
 
 
 #ini 获取信息
