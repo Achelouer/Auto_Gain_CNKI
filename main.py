@@ -9,7 +9,7 @@ from lxml import etree
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from configparser import ConfigParser   # Python2中是from ConfigParser import ConfigParser
-def get_m(urls):
+def get_m(urls,sort):
     url = urls
     driver = webdriver.Edge()
     driver.get(url)
@@ -19,7 +19,7 @@ def get_m(urls):
     _xpath = '//*[@class="wx-tit"]/h1/text()'
     t_xpath = '//*[@id="abstract_text"]/@value'  # 摘要
     t_xpath2 = '//*[@class="keywords"]/a/text()'  # 关键词
-    t_xpath3 = '/html/body/div[2]/div[1]/div[3]/div/div/div[7]/ul/li[3]/p/text()' #分类号
+    t_xpath3 = '(//*[@class="top-space"])[last()]/p/text()' #分类号 /html/body/div[2]/div[1]/div[3]/div/div/div[7]/ul/li[3]/p/text()
     t_xpath4 = '//*[@class="author"]/span/a/text()'  # 作者
     t_xpath42 = '//*[@class="author"]/span/text()'  # 作者
     t_xpath4_1 = '//*[@class="author"]/span/a/sup/text()' #作者标号
@@ -34,24 +34,24 @@ def get_m(urls):
     t5 = t_html.xpath(t_xpath5)
     driver.close()
     with open('message.txt', 'a', encoding='utf-8') as f:
-        f.write('标题：'+title[0]+'\n')
-
-        f.write('作者：')
-        j = 0
-        for i in t4:
-            f.write(i+' ')  # 去除后面格式
-            if len(t4_1)>0:
-                f.write(t4_1[j]+'')
-            if len(t42)>0:
-                f.write(t42[j]+'')
-            j = j+1
-        f.write('\n')
-
-        f.write('单位：')
-        for i in t5:
-            f.write(i+' ')  # 去除后面格式
-        f.write('\n')
-
+        if title[0]:
+            f.write('标题：'+title[0]+'\n')
+        if t4:
+            f.write('作者：')
+            j = 0
+            for i in t4:
+                f.write(i+' ')  # 去除后面格式
+                if len(t4_1)>0:
+                    f.write(t4_1[j]+'')
+                if len(t42)>0:
+                    f.write(t42[j]+'')
+                j = j+1
+            f.write('\n')
+        if t5:
+            f.write('单位：')
+            for i in t5:
+                f.write(i+' ')  # 去除后面格式
+            f.write('\n')
         f.write('摘要：'+t[0] + '\n')
         f.write('关键字：')
         for i in t2:
@@ -65,7 +65,7 @@ def get_m(urls):
         f.write('\n')
         f.close()
     print(title[0]) #标题
-    print(t42)  # 标题
+    print(t3)  #
 
 
 #ini 获取信息
@@ -76,6 +76,7 @@ conf.read('set.ini')  # 需要添加上config.ini的路径，不需要open打开
 urls = conf['user']['url']
 year = conf['user']['year']
 num = conf['user']['num']
+sort = conf['mess']['sort']
 f_time = int(conf['time']['f_time'])#首页加载时间
 
 driver = webdriver.Edge()
@@ -102,7 +103,7 @@ for i in temp:
     time.sleep(1)
     web.click()
 
-    get_m(i)
+    get_m(i,sort)
 
 
 
